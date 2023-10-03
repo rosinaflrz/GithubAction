@@ -5,9 +5,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: my-step
-        run: |
-          echo "Hello World"
-          git config user.name "Your Name"
-          git config user.email "youremail@example.com"
-          git log -1 --pretty=format:"Author: %an%nLast commit: %cd%nChanges:%n" > commit_info.txt
-          git diff HEAD $(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5) >> commit_info.txt
+        run: echo "Hello World"
