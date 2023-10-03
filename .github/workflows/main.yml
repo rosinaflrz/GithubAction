@@ -1,8 +1,22 @@
 name: hello-world
-'on': push
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
   my-job:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: my-step
-        run: echo "Hello World!"
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Print Hello World
+        run: |
+          echo "Hello World!"
+          echo "Author: ${{ github.event.pull_request.user.login }}"
+          echo "Last Commit: ${{ github.event.pull_request.head.sha }}"
+          echo "Changes between last commit and default branch:"
+          git --no-pager diff --name-status ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}
