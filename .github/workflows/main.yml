@@ -4,21 +4,10 @@ jobs:
   my-job:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Get Author and Last Commit
+      - name: my-step
         run: |
-          AUTHOR=$(git log -1 --pretty=format:"%an")
-          LAST_COMMIT=$(git log -1 --pretty=format:"%h %s")
-          echo "Author: $AUTHOR"
-          echo "Last Commit: $LAST_COMMIT"
-
-      - name: Get Changes
-        run: |
-          CHANGES=$(git diff --name-only HEAD...origin/main)
-          echo "Changes:"
-          echo "$CHANGES"
-
-      - name: Hello World
-        run: echo "Hello World"
+          echo "Hello World"
+          git config user.name "Your Name"
+          git config user.email "youremail@example.com"
+          git log -1 --pretty=format:"Author: %an%nLast commit: %cd%nChanges:%n" > commit_info.txt
+          git diff HEAD $(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5) >> commit_info.txt
