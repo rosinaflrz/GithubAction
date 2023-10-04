@@ -1,8 +1,41 @@
+#name: hello-world
+#'on': push
+#jobs:
+#  my-job:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: my-step
+ #       run: echo "Hello World!!"
+
 name: hello-world
-'on': push
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
 jobs:
-  my-job:
+  print_details:
     runs-on: ubuntu-latest
+
     steps:
-      - name: my-step
-        run: echo "Hello World!!"
+      - name: Checkout código
+        uses: actions/checkout@v2
+
+      - name: Actualizar el repositorio
+        run: git fetch --prune --unshallow
+
+      - name: Hello World
+        run: echo "Hello World"
+
+      - name: Detalles del Pull Request
+        run: |
+          echo "Autor del PR: ${{ github.event.pull_request.user.login }}"
+          echo "Último Commit: ${{ github.event.pull_request.head.sha }}"
+          echo "Cambios desde el último Commit al branch predeterminado:"
+          if [ -n "$(git rev-parse ${{ github.event.pull_request.head.sha }})" ] && [ -n "$(git rev-parse ${{ github.event.pull_request.base.sha }})" ]; then
+            git diff --name-only ${{ github.event.pull_request.head.sha }} ${{ github.event.pull_request.base.sha }}
+          else
+            echo "ggg."
+          fi
